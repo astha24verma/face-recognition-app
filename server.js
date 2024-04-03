@@ -58,12 +58,11 @@ app.get('/api/users', async (req, res) => {
 
 // Register user route
 app.post('/api/register', async (req, res) => {
-  console.log("registering user" + req.body.descriptors);
   if (!req.body.username || !req.body.descriptors) {
     return res.status(400).json({ error: 'Invalid request' });
   }
   const { username, descriptors } = req.body;
-  console.log("Recieved at server " + username + " & \n " + descriptors);
+  console.log("Data recieved at server : " + username + " & " + descriptors);
 
   try {
     // Check if the username already exists
