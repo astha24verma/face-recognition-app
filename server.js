@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 
 // MongoDB connection
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, { dbName: "face-recognition-app",})
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
