@@ -16,8 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // MongoDB connection
-
-mongoose.connect(process.env.MONGODB_URI, { dbName: "face-recognition-app",})
+mongoose.connect(process.env.MONGODB_URI, { dbName: "face-recognition-app", })
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
@@ -25,7 +24,7 @@ mongoose.connect(process.env.MONGODB_URI, { dbName: "face-recognition-app",})
 const User = require('./models/User');
 
 // JWT secret key
-const JWT_SECRET = process.env.SECRET_KEY ; //your_secret_key
+const JWT_SECRET = process.env.SECRET_KEY; //your_secret_key
 
 // Verify JWT token middleware
 const verifyToken = (req, res, next) => {
@@ -68,10 +67,10 @@ app.post('/api/register', async (req, res) => {
     // Check if the username already exists
     const existingUser = await User.findOne({ username });
     if (existingUser) {
-      return res.status(409).json({ error: 'Username already exists' });
+      return res.status(200).json({ message: 'Username already exists' });
     }
 
-    //check if descriprors already exists
+    //check if descriprors already exists (in later version)
 
     // Create a new user document
     const newUser = new User({ username, faceDescriptor: descriptors });
@@ -86,10 +85,8 @@ app.post('/api/register', async (req, res) => {
 
 app.post('/api/login', async (req, res) => {
   const { descriptors } = req.body;
-  console.log(`Received descriptors (type: ${typeof descriptors}):`);
-  console.log(descriptors);
 
-  if(descriptors.length === 0) {
+  if (descriptors.length === 0) {
     return res.status(400).json({ error: 'No descriptors generated, capture again' });
   }
 
@@ -129,8 +126,6 @@ app.post('/api/login', async (req, res) => {
     const clientDescriptorArray = Array.isArray(descriptors) ? descriptors : [descriptors];
     const clientDescriptorFloat32 = clientDescriptorArray.map(desc => new Float32Array(Object.values(desc)));
 
-    console.log("Client descriptors:", clientDescriptorFloat32);
-
     // Find the best match for the client descriptor
     const bestMatches = clientDescriptorFloat32.map(descriptor => faceMatcher.findBestMatch(descriptor));
     console.log("Best matches:", bestMatches);
@@ -141,7 +136,7 @@ app.post('/api/login', async (req, res) => {
       console.log(`\n Logged in successfully as ${user.username}`);
 
       // Generate a JWT token
-      const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '48h' });
       res.status(200).json({ token, user: user.username });
     } else {
       res.status(401).json({ error: 'Login failed' });
