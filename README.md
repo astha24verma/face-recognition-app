@@ -42,4 +42,9 @@ You can find the frontend here - [face-recognition-app-frontend](https://github.
 2. Start the backend server: `cd ../backend && npm run dev`
 3. Access the application at `http://localhost:3000`
 
-Stay tuned for updates and new features as I continue to enhance this face recognition application! ♡
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+
+Stay tuned for updates ♡
